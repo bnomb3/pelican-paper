@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="{% block html_lang %}{{ DEFAULT_LANG }}{% endblock %}" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+    {% block head_extra %}{% endblock %}
+    <link rel="stylesheet" href="{{ SITEURL }}/theme/css/output.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        // Check local storage or system preference on page load to avoid FOUC
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 min-h-screen py-8 px-4 sm:px-6 lg:px-8 font-sans text-gray-800 dark:text-gray-300 antialiased transition-colors duration-200">
+    
+    <div class="max-w-3xl mx-auto space-y-8">
+        
+        <!-- Header (Transparent) -->
+        <header class="px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-center sm:text-left">
+                <h1 class="text-4xl font-bold font-serif tracking-tight text-gray-900 dark:text-white">
+                    <a href="{{ SITEURL }}/" class="hover:text-blue-600 transition-colors">{{ SITENAME }}</a>
+                </h1>
+                {% if SITESUBTITLE %}
+                {# A string, or a list to pick one at random on each page load. The first item is
+                   rendered server-side (no-JS / crawler fallback); the inline script swaps it before first paint. #}
+                {% set subtitles = [SITESUBTITLE] if SITESUBTITLE is string else SITESUBTITLE | list %}
+                <p id="site-subtitle" class="text-lg text-gray-500 dark:text-gray-400 mt-1 sm:ml-1 font-serif italic">{{ subtitles[0] }}</p>
+                {% if subtitles | length > 1 %}
+                <script>
+                    (function () {
+                        var subtitles = {{ subtitles | tojson }};
+                        document.getElementById('site-subtitle').innerHTML =
+                            subtitles[Math.floor(Math.random() * subtitles.length)];
+                    })();
+                </script>
+                {% endif %}
+                {% endif %}
+            </div>
+            <nav class="flex items-center space-x-6 text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                <a href="{{ SITEURL }}/" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Home</a>
+                <a href="{{ SITEURL }}/archives.html" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Archives</a>
+                {% for title, link in MENUITEMS %}
+                <a href="{{ link }}" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">{{ title }}</a>
+                {% endfor %}
+                {% if DISPLAY_PAGES_ON_MENU %}
+                {% for p in pages %}
+                <a href="{{ SITEURL }}/{{ p.url }}" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">{{ p.title }}</a>
+                {% endfor %}
+                {% endif %}
+                
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" type="button" aria-label="Toggle Dark Mode" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content (transparent wrapper) -->
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <!-- Footer (Transparent) -->
+        <footer class="px-8 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+            {% if FOOTER_TEXT %}
+            <p>{{ FOOTER_TEXT }}</p>
+            {% else %}
+            <p>
+                &copy; {% if articles %}{{ articles[0].date.year }} {% endif %}{{ AUTHOR or SITENAME }}
+                &middot; Powered by <a href="https://getpelican.com/" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Pelican</a>
+                and <a href="https://github.com/bnomb3/pelican-paper" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">Paper</a>
+            </p>
+            {% endif %}
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            var themeToggleBtn = document.getElementById('theme-toggle');
+
+            // Initial icon state
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                themeToggleLightIcon.classList.remove('hidden');
+            } else {
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+
+            themeToggleBtn.addEventListener('click', function() {
+                // Toggle icons
+                themeToggleDarkIcon.classList.toggle('hidden');
+                themeToggleLightIcon.classList.toggle('hidden');
+
+                // Toggle theme
+                if (localStorage.getItem('theme')) {
+                    if (localStorage.getItem('theme') === 'light') {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    }
+                } else {
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('theme', 'dark');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

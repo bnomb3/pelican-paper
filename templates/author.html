@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "translations.html" import lang_switcher with context %}
+
+{% block title %}Articles by {{ author }} - {{ SITENAME }}{% endblock %}
+
+{% block content %}
+    <header class="mb-8 px-8">
+        <h1 class="text-3xl font-bold font-serif text-gray-900 dark:text-white">Author: {{ author }}</h1>
+    </header>
+
+    <div class="space-y-8">
+        {% for article in articles_page.object_list %}
+            <article class="bg-white dark:bg-gray-900 shadow-md rounded-sm border border-gray-200 dark:border-gray-800 p-6 sm:p-8 hover:shadow-lg transition-shadow duration-300">
+                <header class="mb-6">
+                    <h2 class="text-3xl font-bold font-serif text-gray-900 dark:text-white mb-2 leading-tight">
+                        <a href="{{ SITEURL }}/{{ article.url }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            {{ article.title }}
+                        </a>
+                    </h2>
+                    <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+                        <time datetime="{{ article.date }}" class="font-mono">
+                            {{ article.date|strftime('%Y-%m-%d') }}
+                        </time>
+                        {% if article.category %}
+                        <span>&middot;</span>
+                        <a href="{{ SITEURL }}/{{ article.category.url }}" class="uppercase tracking-wider text-xs font-semibold hover:text-blue-600 dark:hover:text-blue-400">
+                            {{ article.category }}
+                        </a>
+                        {% endif %}
+                        {% if article.translations %}
+                        <span>&middot;</span>
+                        {{ lang_switcher(article) }}
+                        {% endif %}
+                    </div>
+                </header>
+                
+                <div class="entry-content">
+                    {{ article.content }}
+                </div>
+            </article>
+        {% endfor %}
+
+        {% include 'pagination.html' %}
+    </div>
+{% endblock %}

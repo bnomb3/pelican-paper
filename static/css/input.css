@@ -1,0 +1,57 @@
+/* Import the framework */
+@import "tailwindcss";
+
+/* Enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Import Pygments Syntax Highlighting */
+@import "./pygments.css";
+
+/* Tell Tailwind where to look for class names. */
+@source "../../templates";
+
+@theme {
+  --color-brand: #3b82f6;
+  --font-serif: "Merriweather", "Georgia", serif;
+  --font-sans: "Inter", "system-ui", sans-serif;
+}
+
+/* Custom Typography for generated content (when not using prose plugin) */
+@layer components {
+  .entry-content {
+    @apply text-gray-800 dark:text-gray-300 leading-relaxed;
+  }
+  .entry-content h1 {
+    @apply text-2xl font-bold mt-8 mb-4 font-serif text-gray-900 dark:text-gray-100;
+  }
+  .entry-content h2 {
+    @apply text-xl font-bold mt-8 mb-4 font-serif text-gray-900 dark:text-gray-100;
+  }
+  .entry-content h3 {
+    @apply text-lg font-bold mt-6 mb-3 font-serif text-gray-900 dark:text-gray-100;
+  }
+  .entry-content p {
+    @apply mb-6;
+  }
+  .entry-content ul {
+    @apply list-disc list-inside mb-6 pl-4;
+  }
+  .entry-content ol {
+    @apply list-decimal list-inside mb-6 pl-4;
+  }
+  .entry-content a {
+    @apply text-blue-600 dark:text-blue-400 hover:underline underline-offset-4 decoration-blue-300 dark:decoration-blue-700;
+  }
+  .entry-content blockquote {
+    @apply border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 mb-6;
+  }
+  .entry-content pre {
+    @apply bg-gray-50 dark:bg-gray-800 p-4 rounded-md overflow-x-auto text-sm mb-6 border border-gray-100 dark:border-gray-700;
+  }
+  .entry-content code {
+    @apply bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm font-mono text-pink-600 dark:text-pink-400;
+  }
+  .entry-content img {
+    @apply rounded-md shadow-sm max-w-full h-auto my-8;
+  }
+}

@@ -1,0 +1,23 @@
+{# Language switcher for an article or page that has translations.
+   Usage: {% from "translations.html" import lang_switcher %}{{ lang_switcher(article) }} #}
+{% macro lang_switcher(item) %}
+{% if item.translations %}
+<nav aria-label="Language" class="flex items-center gap-2 uppercase tracking-wider text-xs font-semibold">
+    <span aria-current="true" class="text-gray-900 dark:text-white">{{ item.lang }}</span>
+    {% for t in item.translations|sort(attribute='lang') %}
+    <span>/</span>
+    <a href="{{ SITEURL }}/{{ t.url }}" hreflang="{{ t.lang }}" lang="{{ t.lang }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ t.lang }}</a>
+    {% endfor %}
+</nav>
+{% endif %}
+{% endmacro %}
+
+{# <link rel="alternate" hreflang> tags for <head>, so search engines know the versions are linked. #}
+{% macro hreflang_links(item) %}
+{% if item.translations %}
+    <link rel="alternate" hreflang="{{ item.lang }}" href="{{ SITEURL }}/{{ item.url }}" />
+    {% for t in item.translations %}
+    <link rel="alternate" hreflang="{{ t.lang }}" href="{{ SITEURL }}/{{ t.url }}" />
+    {% endfor %}
+{% endif %}
+{% endmacro %}

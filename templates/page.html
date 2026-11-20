@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "translations.html" import lang_switcher, hreflang_links with context %}
+
+{% block html_lang %}{{ page.lang }}{% endblock %}
+{% block head_extra %}{{ hreflang_links(page) }}{% endblock %}
+
+{% block title %}{{ page.title }} - {{ SITENAME }}{% endblock %}
+
+{% block content %}
+    <article class="bg-white dark:bg-gray-900 shadow-md rounded-sm border border-gray-200 dark:border-gray-800 p-8 sm:p-12">
+        <header class="mb-10 text-center sm:text-left">
+            <h1 class="text-3xl sm:text-4xl font-bold font-serif text-gray-900 dark:text-white mb-3 leading-tight">
+                {{ page.title }}
+            </h1>
+            {% if page.translations %}
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-sm text-gray-500 dark:text-gray-400">
+                {{ lang_switcher(page) }}
+            </div>
+            {% endif %}
+        </header>
+        
+        <div class="entry-content">
+            {{ page.content }}
+        </div>
+    </article>
+{% endblock %}

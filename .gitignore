@@ -1,0 +1,9 @@
+__pycache__
+.DS_Store
+*.pyc
+node_modules/
+
+# Demo site
+demo/output/
+demo/.venv/
+demo/__pycache__/

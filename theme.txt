@@ -1,0 +1,5 @@
+Title: Paper
+Author: bnomb3
+License: MIT
+Website: https://github.com/bnomb3/pelican-paper
+Description: A minimalist, paper-like theme for Pelican static site generator.

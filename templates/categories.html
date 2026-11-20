@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Categories - {{ SITENAME }}{% endblock %}
+
+{% block content %}
+    <header class="mb-8 px-8">
+        <h1 class="text-3xl font-bold font-serif text-gray-900 dark:text-white">Categories</h1>
+    </header>
+
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-sm border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
+        <div class="grid gap-6 sm:grid-cols-2">
+            {% for category, articles in categories|sort %}
+                <a href="{{ SITEURL }}/{{ category.url }}" class="block p-6 border border-gray-100 dark:border-gray-800 rounded hover:border-blue-500 dark:hover:border-blue-500 transition-colors group">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
+                        {{ category }}
+                    </h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">
+                        {{ articles|count }} article{% if articles|count != 1 %}s{% endif %}
+                    </p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

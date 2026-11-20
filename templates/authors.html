@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Authors - {{ SITENAME }}{% endblock %}
+
+{% block content %}
+    <header class="mb-8 px-8">
+        <h1 class="text-3xl font-bold font-serif text-gray-900 dark:text-white">Authors</h1>
+    </header>
+
+    <div class="bg-white dark:bg-gray-900 shadow-md rounded-sm border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {% for author, articles in authors|sort %}
+                <a href="{{ SITEURL }}/{{ author.url }}" class="flex items-center gap-4 p-4 border border-gray-100 dark:border-gray-800 rounded hover:border-blue-500 dark:hover:border-blue-500 transition-colors group">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xl font-serif font-bold text-gray-500 dark:text-gray-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {{ author.name|first|upper }}
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            {{ author }}
+                        </h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            {{ articles|count }} article{% if articles|count != 1 %}s{% endif %}
+                        </p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
